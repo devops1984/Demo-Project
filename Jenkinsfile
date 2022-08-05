@@ -37,13 +37,13 @@ pipeline {
 				     version: '1.0.0'
 			}
 		}
-		stage('Transfer artifact to Ansible') {
+		stage('Transfer artifact to Tomcat server') {
                     steps {
 			    sshPublisher(publishers: 
 			      [sshPublisherDesc(configName: 'jenkins', 
 				  transfers: [sshTransfer(cleanRemote: false, 
 				  excludes: '', 
-				  execCommand: 'rsync -avh  /var/lib/jenkins/workspace/demo-project/webapp/target/*.war root@172.31.7.170:/opt/webapp.war', 
+				  execCommand: 'rsync -avh  /var/lib/jenkins/workspace/test2/webapp/target/*.war root@172.31.11.194:/opt/tomcat/apache-tomcat-10.0.23/webapps/webapp.war', 
 				  execTimeout: 120000, flatten: false, 
 				  makeEmptyDirs: false, noDefaultExcludes: false, 
 				  patternSeparator: '[, ]+', 
@@ -52,26 +52,5 @@ pipeline {
 				  usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
                        }
                 }
-		stage ('Run Ansible Playbook') {
-			steps{
-			      sshPublisher(publishers: 
-				 [sshPublisherDesc(configName: 'ansible', 
-				     transfers: [sshTransfer(cleanRemote: false, 
-					  excludes: '', execCommand: 'ansible-playbook /sourcecode/demoproject.yml', 
-					  execTimeout: 120000, flatten: false, 
-					  makeEmptyDirs: false, noDefaultExcludes: false, 
-					  patternSeparator: '[, ]+', remoteDirectory: '', 
-					  remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], 
-					  usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
-                          }
-		}
-		/*stage('Publish Docker Image to DockerHub') {
-                    steps {
-			    withDockerRegistry([credentialsID: "dockerHub" , url: ""])	{	    
-			     sh 'docker push k2r2t2/demoapp:latest'
-			    }
-                       }
-                }*/
-		
 	}
 }   
