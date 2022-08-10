@@ -9,7 +9,7 @@ pipeline {
 			     sh " mvn clean package"   
 			}
 		}
-		 stage('Sonar Analysis') {
+		 /*stage('Sonar Analysis') {
                      steps {
                       withSonarQubeEnv('Sonarqube') {
                              sh " mvn sonar:sonar \
@@ -36,7 +36,7 @@ pipeline {
 				     repository: 'demo-app', 
 				     version: '1.0.0'
 			}
-		}
+		}*/
 		stage('Transfer artifact to Tomcat server') {
                     steps {
 			    sshPublisher(publishers: 
